@@ -6,12 +6,14 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Film struct {
 	Title    string
 	Director string
-	Id       int
+	Id       string
 }
 
 func main() {
@@ -19,36 +21,48 @@ func main() {
 
 	films := map[string]map[string]Film{
 		"Films": {
-			"1": {Title: "The Godfather", Director: "Francis Ford Coppola", Id: 1},
-			"2": {Title: "Blade Runner", Director: "Ridley Scott", Id: 2},
-			"3": {Title: "The Thing", Director: "John Carpenter", Id: 3},
+			"e9fb18e4-f501-4ca7-a3a0-6382c938ca28": {Title: "The Godfather", Director: "Francis Ford Coppola", Id: "e9fb18e4-f501-4ca7-a3a0-6382c938ca28"},
+			"1d1a7cf4-4127-4f3c-bd6b-4769fd024cc5": {Title: "Blade Runner", Director: "Ridley Scott", Id: "1d1a7cf4-4127-4f3c-bd6b-4769fd024cc5"},
+			"c309a87b-0918-488b-8d24-b5d3e439fb53": {Title: "The Thing", Director: "John Carpenter", Id: "c309a87b-0918-488b-8d24-b5d3e439fb53"},
 		},
 	}
 
 	// handler function #1 - returns the index.html template, with film data
-	h1 := func(w http.ResponseWriter, r *http.Request) {
+	indexHandler := func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("index.html"))
 		tmpl.Execute(w, films)
 	}
 
 	// handler function #2 - returns the template block with the newly added film, as an HTMX response
-	h2 := func(w http.ResponseWriter, r *http.Request) {
+	postNewFilmHandler := func(w http.ResponseWriter, r *http.Request) {
+		// Simulate request latency
 		time.Sleep(1 * time.Second)
+
+		// Get values from the form post request
 		title := r.PostFormValue("title")
 		director := r.PostFormValue("director")
-		filmLength := len(films["Films"])
-		newId := filmLength + 1
-		newIdKey := fmt.Sprint(newId)
+
+		// Create new random id for a new Film entry
+		newId := uuid.New().String()
+
 		newFilmEntry := Film{Title: title, Director: director, Id: newId}
-		films["Films"][newIdKey] = newFilmEntry
-		// htmlStr := fmt.Sprintf("<li class='list-group-item bg-primary text-white'>%s - %s</li>", title, director)
-		// tmpl, _ := template.New("t").Parse(htmlStr)
+
+		// Add new film entry to Films in memory
+		films["Films"][newId] = newFilmEntry
+
+		// Get html template and specifically use the block named "film-list-element" to render the new film entry
 		tmpl := template.Must(template.ParseFiles("index.html"))
 		tmpl.ExecuteTemplate(w, "film-list-element", newFilmEntry)
+
+		// Method for writing a new li manually without using the block syntax
+		// htmlStr := fmt.Sprintf("<li class='list-group-item bg-primary text-white'>%s - %s</li>", title, director)
+		// tmpl, _ := template.New("t").Parse(htmlStr)
 	}
 
-	h3 := func(w http.ResponseWriter, r *http.Request) {
+	// handler function #3 - deletes film from list based on the id
+	deleteFilmHandler := func(w http.ResponseWriter, r *http.Request) {
 		time.Sleep(1 * time.Second)
+		// Get id from query param
 		id := r.URL.Query().Get("id")
 
 		// Remove film from Films list in memory
@@ -59,9 +73,9 @@ func main() {
 	}
 
 	// define handlers
-	http.HandleFunc("/", h1)
-	http.HandleFunc("/add-film", h2)
-	http.HandleFunc("/remove-film", h3)
+	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/add-film", postNewFilmHandler)
+	http.HandleFunc("/remove-film", deleteFilmHandler)
 
 	// Handle static files (CSS, JS, Images)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))

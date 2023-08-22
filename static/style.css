@@ -1,6 +1,13 @@
+#film-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .form-submit-indicator,
 .remove-film-indicator {
   display: none;
+  vertical-align: middle;
 }
 
 .htmx-request .form-submit-indicator,
@@ -13,9 +20,6 @@
   display: inline-block;
 }
 
-#film-list li {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.remove-film-btn {
+  font-weight: bold;
 }
-
