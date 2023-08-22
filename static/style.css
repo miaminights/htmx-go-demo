@@ -4,22 +4,25 @@
   justify-content: space-between;
 }
 
+#edit-film div {
+  display: inline-block;
+}
+
 .form-submit-indicator,
-.remove-film-indicator {
+.remove-film-indicator,
+.edit-film-indicator {
   display: none;
   vertical-align: middle;
 }
 
 .htmx-request .form-submit-indicator,
-.htmx-request .remove-film-indicator {
+.htmx-request .remove-film-indicator,
+.htmx-request .edit-film-indicator {
   display: inline-block;
 }
 
 .htmx-request.form-submit-indicator,
-.htmx-request.remove-film-indicator {
+.htmx-request.remove-film-indicator 
+.htmx-request.edit-film-indicator {
   display: inline-block;
-}
-
-.remove-film-btn {
-  font-weight: bold;
 }
