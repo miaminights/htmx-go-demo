@@ -1,0 +1,21 @@
+.form-submit-indicator,
+.remove-film-indicator {
+  display: none;
+}
+
+.htmx-request .form-submit-indicator,
+.htmx-request .remove-film-indicator {
+  display: inline-block;
+}
+
+.htmx-request.form-submit-indicator,
+.htmx-request.remove-film-indicator {
+  display: inline-block;
+}
+
+#film-list li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
