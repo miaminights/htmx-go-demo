@@ -1,4 +1,4 @@
-module htmx-go-example
+module htmx-go-demo
 
 go 1.21.0
 
