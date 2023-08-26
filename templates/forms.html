@@ -1,0 +1,61 @@
+{{ define "add-film-form" }}
+<div class="col-4">
+  <h1 class="mb-4">Add Film</h1>
+
+  <form hx-post="/add-film" hx-on::after-request="this.reset()" hx-target="#film-list" hx-swap="beforeend"
+    hx-indicator="#add-film-spinner">
+    <div class="mb-2">
+      <label for="film-title">Title</label>
+      <input type="text" name="title" id="film-title" class="form-control" />
+    </div>
+    <div class="mb-3">
+      <label for="film-director">Director</label>
+      <input type="text" name="director" id="film-director" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      Submit
+      <span class="spinner-border spinner-border-sm form-submit-indicator" id="add-film-spinner" role="status"
+        aria-hidden="true"></span>
+    </button>
+  </form>
+</div>
+{{ end }}
+
+{{ block "edit-film-value-form" . }}
+<form class='edit-film' id="film-{{ .Id }}" hx-put='/update-film/{{ .Id }}' hx-swap="outerHTML">
+  <div>
+    <input type='text' class='form-control' value='{{ .Title }}' />
+    <span class='spinner-border spinner-border-sm edit-film-indicator' id='edit-film-spinner' role='status'
+      aria-hidden='true'></span>
+  </div>
+
+  <span hx-post="/film-edit-form/{{ .Id }}" hx-include="[name='title']">
+    {{ .Title }}
+    <input name="title" type="text" value="Title" hidden />
+  </span>
+</form>
+{{ end }}
+
+{{ block "edit-film-form" . }}
+<form class='edit-film' id="film-{{ .Id }}" hx-put='/update-film/{{ .Id }}' hx-swap="outerHTML">
+  <div>
+    <label for='film-title'>Title</label>
+    <input type='text' name='title' id='film-title' class='form-control' value="{{ .Title }}" />
+  </div>
+  <div>
+    <label for='film-director'>Director</label>
+    <input type='text' name='director' id='film-director' class='form-control' value="{{ .Director }}" />
+  </div>
+  <div>
+    <button type='submit' class='btn btn-light'>
+      Submit
+      <span class='spinner-border spinner-border-sm edit-film-indicator' id='edit-film-spinner' role='status'
+        aria-hidden='true'></span>
+    </button>
+    <button hx-get='/get-film-item/{{ .Id }}' hx-target='#film-{{ .Id }}' class='btn btn-secondary'>
+      Cancel
+    </button>
+  </div>
+</form>
+{{ end }}

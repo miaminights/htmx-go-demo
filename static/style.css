@@ -4,10 +4,6 @@
   justify-content: space-between;
 }
 
-#edit-film div {
-  display: inline-block;
-}
-
 .form-submit-indicator,
 .remove-film-indicator,
 .edit-film-indicator {
@@ -24,5 +20,9 @@
 .htmx-request.form-submit-indicator,
 .htmx-request.remove-film-indicator 
 .htmx-request.edit-film-indicator {
+  display: inline-block;
+}
+
+.edit-film div {
   display: inline-block;
 }

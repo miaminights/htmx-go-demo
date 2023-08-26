@@ -19,24 +19,29 @@
         <div class="col-8">
             <h1 class="mb-4">Film List</h1>
         
-            <ul class="list-group fs-5 me-5" id="film-list">
+            <ul class="list-group me-5" id="film-list">
                 {{ range .Films }}
-                    {{ block "film-list-element" . }}
-                        <li id="film-{{ .Id }}" hx-swap="outerHTML" hx-trigger="click" class="list-group-item bg-primary text-white">
-                            <div>
-                                {{ .Title }} - {{ .Director }}
+                <li id="film-list-item-{{ .Id }}" class="list-group-item bg-primary text-white">
+                        {{ block "film-list-item" . }}
+                            <div id="film-{{ .Id }}" hx-post="/film-edit-form?id={{ .Id }}" hx-swap="outerHTML">
+                                <div>
+                                    <span>
+                                        {{ .Title }}
+                                    </span> 
+                                    - 
+                                    <span>
+                                        {{ .Director }}
+                                    </span>
+                                </div>
                             </div>
+                        {{ end }}
                             <div>
-                                <button class="btn text-white" hx-get="/film-edit-form?id={{ .Id }}" hx-trigger="click" hx-swap="outerHTML" hx-target="#film-{{ .Id }}">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn text-white" hx-delete="/remove-film?id={{ .Id }}" hx-trigger="click" hx-swap="outerHTML" hx-target="#film-{{ .Id }}">
+                                <button class="btn text-white" hx-delete="/remove-film?id={{ .Id }}" hx-swap="outerHTML" hx-target="#film-list-item-{{ .Id }}">
                                     <i class="bi bi-x"></i>
                                     <span class="remove-film-indicator spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 </button>
                             </div>
                         </li>
-                    {{ end }}
                 {{ end }}
             </ul>
         </div>
