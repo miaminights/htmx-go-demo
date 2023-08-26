@@ -4,23 +4,26 @@
 
   <ul class="list-group me-5" id="film-list">
     {{ range .Films }}
-      <li id="film-list-item-{{ .Id }}" class="list-group-item bg-primary text-white">
-        {{ template "film-list-item" . }}
-        <div>
-          <button class="btn text-white" hx-delete="/remove-film/{{ .Id }}" hx-swap="outerHTML"
-            hx-target="#film-list-item-{{ .Id }}">
-            <i class="bi bi-x"></i>
-            <span class="remove-film-indicator spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          </button>
-        </div>
-      </li>
+      {{ template "film-list-item" . }}
     {{ end }}
   </ul>
 </div>
 {{ end }}
 
-
 {{ block "film-list-item" . }}
+<li id="film-list-item-{{ .Id }}" class="list-group-item bg-primary text-white">
+  {{ template "film-list-item-data" . }}
+  <div>
+    <button class="btn text-white" hx-delete="/remove-film/{{ .Id }}" hx-swap="outerHTML"
+      hx-target="#film-list-item-{{ .Id }}">
+      <i class="bi bi-x"></i>
+      <span class="remove-film-indicator spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </button>
+  </div>
+</li>
+{{ end }}
+
+{{ block "film-list-item-data" . }}
 <div id="film-{{ .Id }}" hx-get="/film-edit-form/{{ .Id }}" hx-swap="outerHTML">
   <div>
     {{ .Title }} - {{ .Director }}

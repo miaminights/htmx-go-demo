@@ -69,14 +69,6 @@ func PostNewFilmHandler(c echo.Context) error {
 	}
 
 	return c.Render(http.StatusOK, "film-list-item", film)
-
-	// Get html template and specifically use the block named "film-list-item" to render the new film entry
-	// tmpl := template.Must(template.ParseFiles("templates/index.html"))
-	// tmpl.ExecuteTemplate(w, "film-list-item", newFilmEntry)
-
-	// Method for writing a new li manually without using the block syntax
-	// htmlStr := fmt.Sprintf("<li class='list-group-item bg-primary text-white'>%s - %s</li>", title, director)
-	// tmpl, _ := template.New("t").Parse(htmlStr)
 }
 
 func DeleteFilmHandler(c echo.Context) error {
@@ -101,7 +93,7 @@ func PostFilmHandler(c echo.Context) error {
 	time.Sleep(1 * time.Second)
 
 	// Get id from path
-	id, err := strconv.Atoi(c.Param("id"))
+	id, _ := strconv.Atoi(c.Param("id"))
 
 	if id == 0 {
 		id = -1
@@ -128,8 +120,13 @@ func PostFilmHandler(c echo.Context) error {
 		c.Logger().Errorf("missing required fields")
 	}
 
-	// Render the updated film with the list element block
-	return c.Render(http.StatusOK, "film-list-item", film)
+	if id == -1 {
+		// Render the updated film with the list element block
+		return c.Render(http.StatusOK, "film-list-item", film)
+	} else {
+		// Render only the "data" template when editing an existing entry in the list item.
+		return c.Render(http.StatusOK, "film-list-item-data", film)
+	}
 }
 
 func FilmEditFormHandler(c echo.Context) error {
