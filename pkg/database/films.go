@@ -15,6 +15,14 @@ type ErrorMap = map[string]string
 func (f *Film) Validate() ErrorMap {
 	var errors ErrorMap = make(ErrorMap)
 
+	if f.Title == "" {
+		errors["title"] = "Title is required"
+	}
+
+	if f.Director == "" {
+		errors["director"] = "Director is required"
+	}
+
 	return errors
 }
 

@@ -43,34 +43,6 @@ func FilmItemHandler(c echo.Context) error {
 	return c.Render(http.StatusOK, "film-list-item", film)
 }
 
-func PostNewFilmHandler(c echo.Context) error {
-	// Simulate request latency
-	time.Sleep(1 * time.Second)
-
-	// Get values from the form post request
-	title := c.FormValue("title")
-	director := c.FormValue("director")
-
-	film := database.Film{
-		Title:    title,
-		Director: director,
-		Id:       -1,
-	}
-
-	errors, err := film.Save()
-
-	if err != nil {
-		c.Logger().Errorf("Unable to save film: %+v", err)
-		return c.String(http.StatusInternalServerError, "")
-	}
-
-	if len(errors) > 0 {
-		c.Logger().Errorf("missing required fields")
-	}
-
-	return c.Render(http.StatusOK, "film-list-item", film)
-}
-
 func DeleteFilmHandler(c echo.Context) error {
 	// Simulate request latency
 	time.Sleep(1 * time.Second)
@@ -118,6 +90,7 @@ func PostFilmHandler(c echo.Context) error {
 
 	if len(errors) > 0 {
 		c.Logger().Errorf("missing required fields")
+		return c.NoContent(http.StatusInternalServerError)
 	}
 
 	if id == -1 {

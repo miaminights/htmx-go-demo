@@ -1,9 +1,9 @@
 package main
 
 import (
-	"html/template"
 	"htmx-go-demo/pkg/database"
 	"htmx-go-demo/pkg/endpoints"
+	"htmx-go-demo/pkg/template"
 	"log"
 	"os"
 	"path/filepath"
@@ -25,7 +25,7 @@ func main() {
 		log.Fatalf("could not initialize db: %+v", err)
 	}
 
-	tmpl, err := template.ParseGlob("templates/*.html")
+	tmpl, err := template.ParseTemplates()
 
 	if err != nil {
 		log.Fatalf("could not initialize templates: %+v", err)
